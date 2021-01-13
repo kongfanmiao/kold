@@ -1,4 +1,4 @@
 
 
-class StabilityDiagram():
+class MeasureStabilityDiagram():
     pass
