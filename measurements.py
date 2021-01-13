@@ -1,4 +1,3 @@
-
-
-class StabilityDiagram():
+class DoStabilityDiagram:
     pass
+
