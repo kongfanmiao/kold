@@ -1,3 +1,3 @@
-class DoStabilityDiagram:
+class MeasureStabilityDiagram:
     pass
 
