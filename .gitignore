@@ -1,3 +1,7 @@
-.vscode
-
 nicola
+.vscode
+__pycache__
+**/__pycache__
+
+qcodesrc_schema.json
+qcodesrc.json
