@@ -1,5 +1,3 @@
 # kold
 
-This is the develop branch, which is ahead of main branch. It contains all the new code that are currently being worked on.
-
-this is the dev branch
+This is the main branch
