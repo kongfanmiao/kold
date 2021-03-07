@@ -4,32 +4,26 @@ import json
 from qcodes.dataset.sqlite.database import initialise_or_create_database_at
 from configuration.config import config_base
 
-from qcodes.utils.helpers import  named_repr
+from qcodes.utils.helpers import named_repr
 
-from typing import  Union
+from typing import Union
 
 
-
-class Sth():
-
+class Sth:
     def __init__(self, create_dir=True):
-        self.path = config_base['root_dir']
-        
+        self.path = config_base["root_dir"]
 
     def create_directory(self):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
-            msg = "{} directory {} created".format(self.__class__.__name__,
-                                                    self.path)
+            msg = "{} directory {} created".format(self.__class__.__name__, self.path)
             print(msg)
-    
+
     def __repr__(self):
         return named_repr(self)
 
 
-
 class Sample(Sth):
-
     def __init__(self, name, create_dir=True, log=True):
         super().__init__()
         self.name = name
@@ -52,10 +46,10 @@ class Sample(Sth):
                 self.log_devices()
 
     def get_path(self):
-        return os.path.join(config_base['root_dir'], self.name)
+        return os.path.join(config_base["root_dir"], self.name)
 
     def log_devices(self):
-        with open(self.log_path, 'w') as fp:
+        with open(self.log_path, "w") as fp:
             dvs_new = {}
             for ch, dvs in self.devices.items():
                 dvs_new[ch] = list(dvs)
@@ -64,9 +58,7 @@ class Sample(Sth):
         print(msg)
 
 
-
 class Device(Sth):
-
     def __init__(self, name, sample, chip, create_dir=True):
         super().__init__()
         self.name = name
@@ -80,29 +72,24 @@ class Device(Sth):
             self.chip = Chip(name=chip, sample=self.sample)
         if self.name not in self.chip.devices:
             self.chip.add_device(self, log=self.sample.log)
-
         self.path = self.get_path()
         if create_dir:
             self.create_directory()
-    
+
     def get_path(self):
-        return os.path.join(config_base['root_dir'],
-                            self.sample.name,
-                            self.chip.name,
-                            self.name)
+        return os.path.join(
+            config_base["root_dir"], self.sample.name, self.chip.name, self.name
+        )
 
     def create_database(self):
         if not os.path.exists(self.path):
             os.makedirs(self.path, exist_ok=True)
-        db_file = "_".join((
-            self.sample.name, self.chip.name, self.name)) + ".db"
+        db_file = "_".join((self.sample.name, self.chip.name, self.name)) + ".db"
         db_path = os.path.join(self.path, db_file)
         initialise_or_create_database_at(db_path)
-    
 
 
 class Chip(Sth):
-    
     def __init__(self, name, sample, create_dir=True):
         super().__init__()
         self.name = name
@@ -126,9 +113,7 @@ class Chip(Sth):
             self.create_directory()
 
     def get_path(self):
-        return os.path.join(config_base['root_dir'],
-                            self.sample.name,
-                            self.name)
+        return os.path.join(config_base["root_dir"], self.sample.name, self.name)
 
     def add_device(self, device, log=True):
         if isinstance(device, Device):
@@ -138,8 +123,4 @@ class Chip(Sth):
         self.sample.devices[self.name] = self.devices
         if log:
             self.sample.log_devices()
-
-
-
-
 
