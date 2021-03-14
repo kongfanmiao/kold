@@ -187,7 +187,7 @@ def plot_csv(path, skiprows=6, header=[0,1], index_col=0, delimiter=',', **kwarg
     plot_heatmap(Vg, Vsd, current, **kwargs)
 
 
-def get_data_from_csv(path, skiprows=6, delimiter=',', header=[0,1],
+def get_raw_data_from_csv(path, skiprows=6, delimiter=',', header=[0,1],
                       index_col=0):
     with open(path) as csv:
         df = pd.read_csv(csv, delimiter=delimiter, skiprows=skiprows,

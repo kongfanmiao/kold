@@ -13,12 +13,12 @@ class AlazarATS9440(AlazarTech_ATS9440):
     AlazarATS9440_AcquisitionController object then read date using 
     self.controller.read().
     """
+
     def __init__(self, name: str,
                  dll_path: str,
                  **kwargs):
         super().__init__(name, dll_path, **kwargs)
         self.controller = None
-    
 
     def set_record_size(self, record_size: Union[list, tuple]):
         if len(record_size) != 2:
@@ -28,7 +28,6 @@ class AlazarATS9440(AlazarTech_ATS9440):
                                  pre_trigger_samples=pre_trig_sps,
                                  post_trigger_samples=post_trig_sps)
 
-
     def set_parameters(self, **kwargs):
         for key, value in kwargs.items():
             if not key in self.parameters.keys():
@@ -36,7 +35,6 @@ class AlazarATS9440(AlazarTech_ATS9440):
                     AlazarTech_ATS9440 driver")
         self.param_kwargs = kwargs
         return self.param_kwargs
-            
 
     def configure(self, **kwargs):
         kws = self.param_kwargs or self.set_parameters(**kwargs)
@@ -48,11 +46,10 @@ class AlazarATS9440(AlazarTech_ATS9440):
             self.channel_selection('A')
             self.mode('NPT')
             self.coupling1('DC')
-            self.channel_range1(1) # 1 V
-            self.impedance1(50) # 50 Ohm
+            self.channel_range1(1)  # 1 V
+            self.impedance1(50)  # 50 Ohm
             for param, value in kws.items():
                 self.set(param, value)
-            
 
 
 class ATSAPI_Plus(AlazarATSAPI):
@@ -62,15 +59,10 @@ class ATSAPI_Plus(AlazarATSAPI):
     pass
 
 
-
-
-
-
-
 class AlazarATS9440_AcquisitionController(AcquisitionController):
     def __init__(self, name: str,
-                 alazar_name:str,
-                 acq_mode = 'dual port',
+                 alazar_name: str,
+                 acq_mode='dual port',
                  **kwargs: Any):
         super().__init__(name, alazar_name, **kwargs)
         self.acq_mode = acq_mode
@@ -80,18 +72,16 @@ class AlazarATS9440_AcquisitionController(AcquisitionController):
         self.add_parameter('read', get_cmd=self._read)
         setattr(self._get_alazar(), 'controller', self)
 
-
     def _read(self):
         if self.acq_mode == 'dual port':
             value = self._get_alazar().acquire(acquisition_controller=self,
-                **self.acq_kwargs)
+                                               **self.acq_kwargs)
         elif self.acq_mode == 'single port':
             pass
         return value
 
     def update_acq_kwargs(self, **kwargs):
         self.acq_kwargs.update(**kwargs)
-
 
     def pre_start_capture(self) -> None:
         alazar = self._get_alazar()
@@ -101,11 +91,11 @@ class AlazarATS9440_AcquisitionController(AcquisitionController):
         self.buffer = np.zeros(self.samples_per_record *
                                self.records_per_buffer *
                                self.num_of_channels)
-    
+
     def pre_acquire(self):
         pass
 
-    def handle_buffer(self, data: np.ndarray, 
+    def handle_buffer(self, data: np.ndarray,
                       buffer_number: Optional[int] = None):
         assert self.buffer is not None
         self.buffer += data
@@ -123,5 +113,3 @@ class AlazarATS9440_AcquisitionController(AcquisitionController):
             record += self.buffer[i0:i1] / records_per_acquisition
 
         return alazar.signal_to_volt(1, record + 127.5)
-        
-
