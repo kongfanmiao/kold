@@ -2,7 +2,7 @@ import os
 import json
 
 from qcodes.dataset.sqlite.database import initialise_or_create_database_at
-from configuration.config import config_base
+from .configuration.config import config_base
 
 from qcodes.utils.helpers import named_repr
 

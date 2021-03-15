@@ -1,8 +1,16 @@
 
 nicola
+QTLab
+qdev-wrappers
+user-manual
+learn
+oxnanospin.png
+
+.spyproject
 .vscode
 __pycache__
 **/__pycache__
+**/**/__pycache__
 
 qcodesrc_schema.json
 qcodesrc.json
