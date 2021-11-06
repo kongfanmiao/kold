@@ -1,3 +1,3 @@
 # kold
 
-This is the main branch
+This package is still under developing. Most of the code is in dev branch
